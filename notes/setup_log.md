@@ -1,4 +1,15 @@
-# Setup Log
+cd ~/speech-project
+nano notes/setup_log.md## 2026-03-14 (continued)
+
+### What I did
+- Copied `text_to_phones.py` from the local Kaldi USC example into `~/speech-project/scripts/`
+
+### Why
+- This script is project-specific and should be tracked in the shared GitHub repository.
+
+### Notes
+- Shared scripts should live in the repository.
+- Kaldi installation files and local dataset files should remain outside the repository.# Setup Log
 
 ## 2026-03-14
 
