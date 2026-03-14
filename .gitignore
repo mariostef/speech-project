@@ -1,0 +1,29 @@
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Generated / large artifacts
+exp/
+mfcc/
+*.ark
+*.mdl
+*.mat
+*.fst
+*.gz
+
+# Dataset copies
+USC-TIMIT/
+wav/
+audio/
+
+# Temporary files
+*.tmp
+
