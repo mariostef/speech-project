@@ -24,6 +24,10 @@ USC-TIMIT/
 wav/
 audio/
 usc/
+data/dev
+data/train
+data/test
+
 # Temporary files
 *.tmp
 

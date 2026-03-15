@@ -144,3 +144,21 @@ nano notes/setup_log.md## 2026-03-14 (continued)
 - Add `.gitignore`
 - Make the first commit
 - Connect the repository to GitHub
+
+
+
+## 2026-03-15 — Prelab Preparation: Data Scripts & Local Setup
+
+### What was done
+- Placed the provided dataset into `usc/`.
+- Updated `.gitignore` to ignore the `usc/` folder and all generated data folders (`data/train/`, `data/dev/`, `data/test/`) to ensure no local data or large index files are pushed to the repository.
+- Developed 4 standalone Python scripts in `local/` to handle the **Prelab Preparation** requirements:
+    - `make_uttids.py`
+    - `make_utt2spk.py`
+    - `make_wavscp.py`
+    - `make_text.py`
+
+### Important Notes for Teammates
+- **Manual Path Configuration:** Each teammate must manually update the path variables at the beginning of these 4 scripts to match their local environment (Docker vs. WSL) before execution.
+- **Absolute Paths in wav.scp:** The `make_wavscp.py` script is designed to generate **absolute paths** for each `.wav` file. Absolute paths are mandatory for Kaldi to function correctly; relative paths will cause execution errors.
+- **Prelab Status:** All required Prelab files (`uttids`, `utt2spk`, `wav.scp`, `text`) have been successfully generated locally. The project is now ready to move to the main questions (Lexicon/LM).
