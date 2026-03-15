@@ -6,11 +6,13 @@
 - [ ] Keep README and notes aligned with the current structure
 
 ## Prelab
-- [ ] Inspect the USC Kaldi example structure
-- [ ] Verify train/dev/test prepared files
-- [ ] Verify `uttids`, `utt2spk`, `wav.scp`, `text.words`, `text`
-- [ ] Confirm the word-to-phone conversion logic
-- [ ] Document what parts of the prelab are already complete
+- [x] Inspect the USC Kaldi example structure
+- [x] Verify train/dev/test prepared files
+- [x] Verify `uttids`, `utt2spk`, `wav.scp`, `text.words`, `text`
+- [x] Confirm that `text.words` contains sentence text
+- [x] Confirm that `text` contains phone sequences with `sil`
+- [ ] Decide whether any additional prelab generation script is needed
+- [ ] Document the prelab findings in the report
 
 ## Question 1
 - [ ] Prepare dictionary files

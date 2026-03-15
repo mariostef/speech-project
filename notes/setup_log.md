@@ -1,4 +1,25 @@
-# Setup Log
+## 2026-03-14 — Prelab check
+
+### What was done
+- Added `questions/prelab.sh` as the script for the prelab stage
+- Checked the local USC Kaldi example directory
+- Verified that `data/train`, `data/dev`, and `data/test` exist
+- Verified the presence of:
+  - `uttids`
+  - `utt2spk`
+  - `wav.scp`
+  - `text.words`
+  - `text`
+
+### Findings
+- The basic prepared data structure already exists for train/dev/test
+- `text.words` contains the original sentence text
+- `text` already contains phone sequences
+- `text` includes `sil` at the beginning and end of each utterance
+
+### Conclusion
+- The basic prelab data preparation appears to already be completed in the local USC example
+- The next step is to move to Question 1 (lexicon / LM / perplexity)# Setup Log
 
 ## 2026-03-14
 
