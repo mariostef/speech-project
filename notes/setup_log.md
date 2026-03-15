@@ -76,8 +76,8 @@
 ## 2026-03-14
 
 ### What was done
-- Identified the local Kaldi installation at `~/kaldi-work/kaldi`
-- Identified the USC example directory at `~/kaldi-work/kaldi/egs/usc`
+- Identified the local Kaldi installation at `$KALDI_ROOT`
+- Identified the USC example directory at `$KALDI_ROOT/egs/usc`
 - Confirmed that the main Kaldi directory is already its own Git repository
 - Created a separate team repository at `~/speech-project`
 - Initialized Git locally and connected the repository to GitHub
@@ -132,8 +132,8 @@ nano notes/setup_log.md## 2026-03-14 (continued)
 
 ### Environment
 - Local machine uses WSL
-- Kaldi is located at `~/kaldi-work/kaldi`
-- The Kaldi USC example is located at `~/kaldi-work/kaldi/egs/usc`
+- Kaldi is located at `$KALDI_ROOT`
+- The Kaldi USC example is located at `$KALDI_ROOT/egs/usc`
 
 ### Notes
 - The main Kaldi directory is already its own Git repository, so our team project should remain separate.

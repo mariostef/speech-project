@@ -4,7 +4,8 @@ set -e
 
 echo "=== PRELAB CHECK ==="
 
-USC_EGS_DIR="${USC_EGS_DIR:-$HOME/kaldi-work/kaldi/egs/usc}"
+: "${KALDI_ROOT:?set KALDI_ROOT first}"
+USC_EGS_DIR="${USC_EGS_DIR:-$KALDI_ROOT/egs/usc}"
 
 echo "Using USC_EGS_DIR=$USC_EGS_DIR"
 echo

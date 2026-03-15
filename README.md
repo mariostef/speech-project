@@ -71,8 +71,8 @@ The shared GitHub repository stores:
 
 ## Local environment
 On the current setup:
-- Kaldi root: `~/kaldi-work/kaldi`
-- USC example directory: `~/kaldi-work/kaldi/egs/usc`
+- Kaldi root: `$KALDI_ROOT`
+- USC example directory: `$KALDI_ROOT/egs/usc`
 
 ## Workflow
 Typical workflow:
