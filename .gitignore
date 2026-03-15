@@ -23,7 +23,7 @@ mfcc/
 USC-TIMIT/
 wav/
 audio/
-
+usc/
 # Temporary files
 *.tmp
 
