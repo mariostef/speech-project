@@ -1,4 +1,42 @@
-cd ~/speech-project
+# Setup Log
+
+## 2026-03-14
+
+### What was done
+- Identified the local Kaldi installation at `~/kaldi-work/kaldi`
+- Identified the USC example directory at `~/kaldi-work/kaldi/egs/usc`
+- Confirmed that the main Kaldi directory is already its own Git repository
+- Created a separate team repository at `~/speech-project`
+- Initialized Git locally and connected the repository to GitHub
+- Created a question-based project structure
+- Added the following top-level files:
+  - `main.sh`
+  - `path.sh`
+  - `cmd.sh`
+- Added the following directories:
+  - `questions/`
+  - `local/`
+  - `conf/`
+  - `dnn/`
+  - `notes/`
+  - `report/`
+- Moved `text_to_phones.py` into `local/`
+
+### Current structure
+The repository is currently organized around:
+- one script per assignment section/question in `questions/`
+- dataset-specific helper scripts in `local/`
+- report and notes stored separately
+
+### Environment
+- Local machine uses WSL
+- GitHub repository is active and connected
+- Kaldi execution remains outside the repository
+
+### Notes
+- The repository is now organized for collaboration between WSL and Docker-based environments.
+- Shared code belongs in the repository.
+- Local data, Kaldi installation files, and generated outputs stay outside the repository.cd ~/speech-project
 nano notes/setup_log.md## 2026-03-14 (continued)
 
 ### What I did
