@@ -27,3 +27,7 @@ audio/
 # Temporary files
 *.tmp
 
+
+steps
+utils
+local/score_kaldi.sh
