@@ -28,6 +28,6 @@ audio/
 *.tmp
 
 
-steps
-utils
+#steps
+#utils
 #local/score_kaldi.sh
