@@ -1,3 +1,31 @@
+## 2026-03-15 — Step 4.1.1 setup
+
+### What was done
+- Copied `path.sh` and `cmd.sh` from `egs/wsj/s5`
+- Set `KALDI_ROOT` in `path.sh` with a portable fallback
+- Set `train_cmd`, `decode_cmd`, `cuda_cmd` to `run.pl`
+- Added symlinks `steps` and `utils` to `wsj/s5`
+- Added `local/score_kaldi.sh` symlink
+- Added `conf/mfcc.conf` from `wsj/s5/conf`
+- Created language folders: `data/lang`, `data/local/dict`, `data/local/lm_tmp`, `data/local/nist_lm`
+
+### Notes
+- Teammate should export their own `KALDI_ROOT` in their shell
+
+## 2026-03-15 — Step 4.1.1 setup
+
+### What was done
+- Copied `path.sh` and `cmd.sh` from `egs/wsj/s5`
+- Set `KALDI_ROOT` in `path.sh` with a portable fallback
+- Set `train_cmd`, `decode_cmd`, `cuda_cmd` to `run.pl`
+- Added symlinks `steps` and `utils` to `wsj/s5`
+- Added `local/score_kaldi.sh` symlink
+- Added `conf/mfcc.conf` from `wsj/s5/conf`
+- Created language folders: `data/lang`, `data/local/dict`, `data/local/lm_tmp`, `data/local/nist_lm`
+
+### Notes
+- Teammate should export their own `KALDI_ROOT` in their shell
+
 ## 2026-03-14 — Prelab check
 
 ### What was done
