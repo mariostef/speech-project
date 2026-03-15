@@ -30,4 +30,4 @@ audio/
 
 steps
 utils
-local/score_kaldi.sh
+#local/score_kaldi.sh
