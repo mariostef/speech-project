@@ -1,3 +1,27 @@
+## 2026-03-15 — Make symlinks portable
+
+### What was done
+- Added `local/setup_links.sh` to generate `steps`, `utils`, `local/score_kaldi.sh` from `KALDI_ROOT`
+- Added symlinks to `.gitignore` so they are not versioned
+- Removed symlinks from the repo to avoid hardcoded paths
+
+### Notes
+- Each teammate must set `KALDI_ROOT` and run `local/setup_links.sh`
+
+## 2026-03-15 — Step 4.1.1 setup
+
+### What was done
+- Copied `path.sh` and `cmd.sh` from `egs/wsj/s5`
+- Set `KALDI_ROOT` in `path.sh` with a portable fallback
+- Set `train_cmd`, `decode_cmd`, `cuda_cmd` to `run.pl`
+- Added symlinks `steps` and `utils` to `wsj/s5`
+- Added `local/score_kaldi.sh` symlink
+- Added `conf/mfcc.conf` from `wsj/s5/conf`
+- Created language folders: `data/lang`, `data/local/dict`, `data/local/lm_tmp`, `data/local/nist_lm`
+
+### Notes
+- Teammate should export their own `KALDI_ROOT` in their shell
+
 ## 2026-03-15 — Step 4.1.1 setup
 
 ### What was done
