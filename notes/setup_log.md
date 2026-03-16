@@ -310,3 +310,67 @@ Used Kaldi utilities to determine the dimensionality of the extracted features a
 | **Frames (3rd)** | `f1_005` | **399** |
 | **Frames (4th)** | `f1_007` | **328** |
 | **Frames (5th)** | `f1_008` | **464** |
+
+
+## 4.4 Acoustic Model Training & Decoding
+
+### Step 9: Monophone Training
+**What was done:**
+* **Training:** Baseline Monophone GMM-HMM training using `train_mono.sh`.
+* **Method:** Phone parameters are estimated independently.
+* **Output:** Model stored in `exp/mono/final.mdl`.
+
+**Execution (from project root):**
+1. `steps/train_mono.sh --nj 4 --cmd run.pl data/train data/lang exp/mono`
+
+### Step 10: HCLG Graph Creation
+**What was done:**
+* **Graph Generation:** Created the HCLG decoding graphs for both Bigram and Unigram language models.
+* **Integration:** Combined the acoustic model (H), context (C), lexicon (L), and grammar (G) into a single search graph.
+* **Output:** Graphs stored in `exp/mono/graph_bg` and `exp/mono/graph_ug`.
+
+**Execution (from project root):**
+1. `utils/mkgraph.sh data/lang_test_bg exp/mono exp/mono/graph_bg`
+2. `utils/mkgraph.sh data/lang_test_ug exp/mono exp/mono/graph_ug`
+
+### Step 11: Decoding & WER Evaluation
+**What was done:**
+* **Decoding:** Performed speech recognition on the `dev` and `test` sets using the Viterbi algorithm.
+* **Comparison:** Evaluated both Unigram and Bigram graphs to compare their impact on Word Error Rate (WER).
+* **Automation:** Used `local/decode.sh` to run the decoding processes and extract the best WER results.
+
+**Execution (from project root):**
+1. `chmod +x local/decode.sh`
+2. `./local/decode.sh`
+
+**Best WER Results:**
+
+| Decoding Task | WER (%) | Details (Ins/Del/Sub) |
+| :--- | :--- | :--- |
+| **Dev (Bigram)** | **46.03** | 114 ins, 920 del, 1167 sub |
+| **Dev (Unigram)** | **52.53** | 79 ins, 1372 del, 1061 sub |
+| **Test (Bigram)** | **44.81** | 193 ins, 2497 del, 2863 sub |
+| **Test (Unigram)** | **51.32** | 109 ins, 3614 del, 2636 sub |
+
+
+
+### Step 12: Phone Error Rate (PER) & Scoring Hyperparameters
+
+**What was done:**
+Identification of the best Phone Error Rate (PER) and the optimal scoring hyperparameters (LMW, WIP) from the Bigram decoding results.
+
+**Execution (from project root):**
+1. `cat exp/mono/decode_test_bg/scoring_kaldi/best_wer`
+
+**Results:**
+* **Best PER:** **44.81%**
+* **Optimal Hyperparameters:**
+    * **LMW (Language Model Weight):** **7**
+    * **WIP (Word Insertion Penalty):** **0.0**
+
+**Hyperparameters Explanation:**
+1. **LMW (Language Model Weight):** Scales the influence of the Language Model against the Acoustic Model. A value of 7 means the LM log-probabilities were multiplied by 7.
+2. **WIP (Word Insertion Penalty):** A constant added to the log-probability each time a new phoneme is hypothesized. It controls the trade-off between insertions and deletions. Here, the best value was 0.0.
+
+**Mathematical Verification:**
+Using the provided formula: $PER = 100 \cdot \frac{193 + 2863 + 2497}{12392} = 44.81\%$
