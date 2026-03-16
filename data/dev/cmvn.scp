@@ -1,0 +1,4 @@
+f1 /opt/kaldi/egs/speech-project/mfcc/cmvn_dev.ark:3
+f5 /opt/kaldi/egs/speech-project/mfcc/cmvn_dev.ark:245
+m1 /opt/kaldi/egs/speech-project/mfcc/cmvn_dev.ark:487
+m3 /opt/kaldi/egs/speech-project/mfcc/cmvn_dev.ark:729

@@ -276,3 +276,37 @@ Evaluation of the generated Unigram and Bigram language models by calculating th
 
 **Conclusion:**
 The Bigram model reduces perplexity by approximately 50% compared to the Unigram, indicating that phoneme context significantly improves the model's predictive accuracy.
+
+## 4.3 Feature Extraction (MFCCs)
+
+### Step 8: MFCC Extraction & CMVN Stats
+**What was done:**
+* **Automation:** Developed the `local/run_mfcc.sh` script to automate the extraction of Mel-Frequency Cepstral Coefficients (MFCCs) for the `train`, `dev`, and `test` sets.
+* **Normalization:** Applied Cepstral Mean and Variance Normalization (CMVN) to ensure the features are robust against different recording conditions.
+* **Storage:** Extracted features are stored in `.ark` files, with `.scp` files acting as pointers to individual utterances.
+
+**Execution (from project root):**
+1. `chmod +x local/run_mfcc.sh`
+2. `./local/run_mfcc.sh`
+
+---
+
+### Question 3: Acoustic Frames & Feature Dimension
+
+**What was done:**
+Used Kaldi utilities to determine the dimensionality of the extracted features and the number of acoustic frames for the first 5 utterances of the training set.
+
+**Execution (from project root):**
+1. `feat-to-dim scp:data/train/feats.scp -`
+2. `feat-to-len scp:data/train/feats.scp ark,t:- | head -n 5`
+
+**Results:**
+
+| Property | Value / Utterance ID | Count / Dimension |
+| :--- | :--- | :--- |
+| **Feature Dimension** | All utterances | **13** |
+| **Frames (1st)** | `f1_003` | **317** |
+| **Frames (2nd)** | `f1_004` | **371** |
+| **Frames (3rd)** | `f1_005` | **399** |
+| **Frames (4th)** | `f1_007` | **328** |
+| **Frames (5th)** | `f1_008` | **464** |
