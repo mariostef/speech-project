@@ -162,3 +162,117 @@ nano notes/setup_log.md## 2026-03-14 (continued)
 - **Manual Path Configuration:** Each teammate must manually update the path variables at the beginning of these 4 scripts to match their local environment (Docker vs. WSL) before execution.
 - **Absolute Paths in wav.scp:** The `make_wavscp.py` script is designed to generate **absolute paths** for each `.wav` file. Absolute paths are mandatory for Kaldi to function correctly; relative paths will cause execution errors.
 - **Prelab Status:** All required Prelab files (`uttids`, `utt2spk`, `wav.scp`, `text`) have been successfully generated locally. The project is now ready to move to the main questions (Lexicon/LM).
+
+## 2026-03-16 — Step 4.2: Language Model Preparation
+
+### Step 1: Dictionary Preparation (data/local/dict)
+**What was done:**
+* **Silence Phones:** Created `silence_phones.txt` and `optional_silence.txt` in `data/local/dict/` containing the `sil` phoneme.
+* **Nonsilence Phones:** Developed and executed `local/get_nonsilence_phones.py`. The script extracts unique phonemes from the original dataset lexicon (excluding `sil`) and saves them alphabetized in `nonsilence_phones.txt`.
+* **Phoneme Lexicon:** Developed and executed `local/prepare_phn_lexicon.py`. This creates a new `lexicon.txt` for phoneme recognition where each phoneme maps to itself (1-1 mapping), including the `sil sil` entry.
+* **LM Text Preparation:** Developed and executed `local/prepare_lm_text.py`. The script processes the `text` files for train, dev, and test sets by stripping utterance IDs and wrapping the phoneme sequences with `<s>` and `</s>` tags.
+* **Extra Questions:** Created the required empty `extra_questions.txt` file using the `touch` command.
+
+**Execution (from project root):**
+1. `echo "sil" > data/local/dict/silence_phones.txt`
+2. `echo "sil" > data/local/dict/optional_silence.txt`
+3. `touch data/local/dict/extra_questions.txt`
+
+**Python Script Execution (run from local/ directory due to relative paths):**
+1. `cd local`
+2. `python3 get_nonsilence_phones.py`
+3. `python3 prepare_phn_lexicon.py`
+4. `python3 prepare_lm_text.py`
+
+### Step 2: Generation of Intermediate Language Model Format
+**What was done:**
+* **Automation:** Created the bash script `local/train_lms.sh` to automate the production of Unigram and Bigram models using the IRSTLM toolkit.
+* **File Generation:** Generated the intermediate `.ilm.gz` files.
+* **Output Files:** * `unigram.ilm.gz` (Order n=1)
+    * `bigram.ilm.gz` (Order n=2)
+
+**Execution (from the local/ directory):**
+1. `chmod +x train_lms.sh`
+2. `./train_lms.sh`
+
+**Note for the team:** > If the `build-lm.sh` command returns a "command not found" error, it means the Docker environment does not have IRSTLM in its automatic Path or it hasn't been installed correctly. Ensure you have sourced `path.sh`.
+
+### Step 3: Compilation of Language Models to ARPA Format
+**What was done:**
+* **Automation:** Created a bash script `local/compile_arpa_lms.sh` to convert the intermediate `.ilm.gz` files into the final ARPA format.
+* **Filtering:** Used `grep -v unk` during compilation to remove unknown word tags, ensuring the phoneme-based models remain clean.
+* **Storage:** The compiled models were stored in `data/local/nist_lm/`.
+* **Output Files:**
+    * `lm_phone_ug.arpa.gz` (Unigram ARPA)
+    * `lm_phone_bg.arpa.gz` (Bigram ARPA)
+
+**Execution (from the local/ directory):**
+1. `chmod +x compile_arpa_lms.sh`
+2. `./compile_arpa_lms.sh`
+
+**Note:** Sourcing `path.sh` inside the script ensures that the IRSTLM `compile-lm` utility is accessible during execution.
+
+### Step 4: Creation of Lang Directory and L.fst
+**What was done:**
+* **FST Generation:** Developed the `local/prepare_lang.sh` script to automate the setup of the `data/lang` directory.
+* **Processing:** Utilized the Kaldi utility `utils/prepare_lang.sh`. The script takes the prepared dictionary from `data/local/dict`, defines the Out-Of-Vocabulary (`<oov>`) symbol, and generates the necessary files in `data/lang`.
+* **Result:** Successfully created `L.fst`, which represents the lexicon as a Finite State Transducer.
+
+**Execution (from project root):**
+1. `chmod +x local/prepare_lang.sh`
+2. `./local/prepare_lang.sh`
+
+**Note:** The script sources `path.sh` to ensure that Kaldi binaries and `utils/` scripts are within the environment's execution path.
+
+
+### Steps 5 & 6: Data Sorting and spk2utt Generation
+**What was done:**
+* **Data Sorting:** Developed the `local/fix_data_sorting.sh` bash script to automate the alphabetical sorting of `wav.scp`, `text`, and `utt2spk` files.
+* **Batch Processing:** The sorting process was applied to all data splits: `train`, `dev`, and `test`.
+* **Speaker-to-Utterance Mapping:** Utilized the Kaldi utility `utils/utt2spk_to_spk2utt.pl` to generate `spk2utt` files, which map each speaker to their corresponding utterances.
+
+**Execution (from project root):**
+1. `chmod +x local/fix_data_sorting.sh`
+2. `./local/fix_data_sorting.sh`
+
+**Note:** Sorting is mandatory in Kaldi (files must be C-sorted) to prevent errors in subsequent training and decoding stages.
+
+### Step 7: Creation of the Grammar FST (G.fst)
+**What was done:**
+* **G.fst Generation:** Developed the `local/format_data.sh` script, following the TIMIT recipe logic. This script converts the ARPA language models (Unigram and Bigram) into Finite State Transducer (FST) format.
+* **Process:**
+    * Created dedicated test directories: `data/lang_test_ug` and `data/lang_test_bg`.
+    * Utilized the `arpa2fst` utility to transform `.arpa.gz` files into `G.fst`.
+    * Ran `fstisstochastic` to verify that the resulting FSTs are properly normalized (stochastic).
+* **Result:** Successfully prepared the language directories required for the decoding phase.
+
+**Execution (from project root):**
+1. `chmod +x local/format_data.sh`
+2. `./local/format_data.sh`
+
+**Note:** The `--disambig-symbol=#0` flag is used to handle backoff transitions correctly and ensure the FST composition is valid.
+
+
+
+### Question 1: Perplexity Evaluation
+
+**What was done:**
+Evaluation of the generated Unigram and Bigram language models by calculating their Perplexity (PP) on the validation and test sets.
+
+**Execution (from project root):**
+1. `compile-lm data/local/lm_tmp/unigram.ilm.gz --eval=data/local/dict/lm_dev.text`
+2. `compile-lm data/local/lm_tmp/unigram.ilm.gz --eval=data/local/dict/lm_test.text`
+3. `compile-lm data/local/lm_tmp/bigram.ilm.gz --eval=data/local/dict/lm_dev.text`
+4. `compile-lm data/local/lm_tmp/bigram.ilm.gz --eval=data/local/dict/lm_test.text`
+
+**Results:**
+
+| Model | Dataset | Perplexity (PP) |
+| :--- | :--- | :--- |
+| **Unigram** | Validation (dev) | **32.43** |
+| **Unigram** | Test | **31.99** |
+| **Bigram** | Validation (dev) | **17.06** |
+| **Bigram** | Test | **16.90** |
+
+**Conclusion:**
+The Bigram model reduces perplexity by approximately 50% compared to the Unigram, indicating that phoneme context significantly improves the model's predictive accuracy.

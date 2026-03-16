@@ -20,6 +20,7 @@ mfcc/
 *.gz
 
 # Dataset copies
+data
 USC-TIMIT/
 wav/
 audio/
