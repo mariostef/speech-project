@@ -20,14 +20,14 @@ mfcc/
 *.gz
 
 # Dataset copies
-data
+#data
 USC-TIMIT/
 wav/
 audio/
-usc/
-data/dev
-data/train
-data/test
+#usc/
+#data/dev
+#data/train
+#data/test
 
 # Temporary files
 *.tmp
