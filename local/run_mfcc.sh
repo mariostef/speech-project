@@ -3,7 +3,7 @@
 . ./path.sh
 
 mkdir mfcc
-mkfir -p exp/make_mfcc   
+mkdir -p exp/make_mfcc   
 
 for x in train dev test; do
     steps/make_mfcc.sh --nj 4 data/$x exp/make_mfcc/$x mfcc || exit 1;

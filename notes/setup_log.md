@@ -290,7 +290,60 @@ The Bigram model reduces perplexity by approximately 50% compared to the Unigram
 2. `./local/run_mfcc.sh`
 
 ---
+### Update for Marios local setup (non-Docker environment)
 
+While reproducing the pipeline on Marios' machine, a few setup-specific adjustments were required because his environment does not use Docker.
+
+#### 1. `steps` and `utils` symlinks
+The existing symlinks were pointing to relative paths:
+- `../wsj/s5/steps`
+- `../wsj/s5/utils`
+
+These paths did not exist on Marios' machine, so `local/prepare_lang.sh` failed because `utils/prepare_lang.sh` could not be found.
+
+The symlinks were recreated to point to the actual Kaldi installation under:
+- `$KALDI_ROOT/egs/wsj/s5/steps`
+- `$KALDI_ROOT/egs/wsj/s5/utils`
+
+This fixed the `prepare_lang.sh` execution.
+
+#### 2. `wav.scp` regeneration for non-Docker paths
+MFCC extraction initially failed because the existing `wav.scp` files contained Docker-specific paths:
+- `/opt/kaldi/egs/speech-project/usc/wav/...`
+
+On Marios' machine, the actual USC wav directory is:
+- `/home/marios1316/kaldi-work/kaldi/egs/usc/usc/wav`
+
+Therefore, `local/make_wavscp.py` was updated locally to use the correct wav directory, and the following files were regenerated:
+- `data/train/wav.scp`
+- `data/dev/wav.scp`
+- `data/test/wav.scp`
+
+After this change, MFCC extraction was able to access the correct audio files.
+
+#### 3. Bug fix in `local/run_mfcc.sh`
+A typo was identified in `local/run_mfcc.sh`:
+- `mkfir -p exp/make_mfcc`
+
+This was corrected to:
+- `mkdir -p exp/make_mfcc`
+
+#### 4. Verification of results so far
+After the above fixes, the following stages were successfully verified on Marios' machine:
+
+- `prepare_lang.sh` completed successfully and validated `data/lang`
+- phone LM training completed successfully
+- ARPA LM compilation completed successfully
+- `format_data.sh` successfully generated:
+  - `data/lang_test_ug/G.fst`
+  - `data/lang_test_bg/G.fst`
+- `run_mfcc.sh` successfully completed for:
+  - `train`
+  - `dev`
+  - `test`
+- `compute_cmvn_stats.sh` also completed successfully for all three sets
+
+This confirms that the pipeline up to Section 4.3 is now running correctly on Marios' non-Docker setup.
 ### Question 3: Acoustic Frames & Feature Dimension
 
 **What was done:**
