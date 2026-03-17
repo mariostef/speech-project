@@ -427,3 +427,24 @@ Identification of the best Phone Error Rate (PER) and the optimal scoring hyperp
 
 **Mathematical Verification:**
 Using the provided formula: $PER = 100 \cdot \frac{193 + 2863 + 2497}{12392} = 44.81\%$
+
+
+
+### Step 12: Triphone Training & Decoding
+**What was done:**
+* **Alignment:** Aligned the training data using the existing monophone model (`exp/mono_ali`).
+* **Training:** Trained the first triphone model (`tri1`) using delta and delta-delta features (velocity and acceleration of MFCCs).
+* **Configuration:** Set the model to 2,000 leaf nodes and 10,000 total Gaussians.
+* **Graph & Decoding:** Generated the HCLG graph and performed decoding on the test set using the Bigram language model.
+
+**Execution (from project root):**
+1. `chmod +x local/run_tri.sh`
+2. `./local/run_tri.sh`
+
+**Results:**
+* **Model:** Triphone (tri1)
+* **Best PER:** **34.93%**
+* **Improvement:** Approximately **~10% reduction** in PER compared to the Monophone baseline (44.81%).
+
+**Conclusion:**
+The transition to triphones significantly improves performance. By modeling phonemes in context (taking into account preceding and following sounds) and using dynamic features (deltas), the system captures acoustic transitions much more effectively.
